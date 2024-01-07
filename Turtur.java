@@ -5,46 +5,27 @@ import java.util.Scanner;
 import java.util.HashSet;
 import java.util.Iterator;
 
-public class consoleAI {
+public class Turtur {
 
-    static int charValue[] = new int[26];
-    static String allWords[] = new String[14855];
-    static String bestWord = "";
-    static int bestWordValue = 0;
-    static String secondBestWord = "";
-    static int secondBestWordValue = 0;
-    static String thirdBestWord = "";
-    static int thirdBestWordValue = 0;
-    static Scanner scan = new Scanner(System.in);
-    static short[][] wordChars = new short[5][26];
-    static int[] charFreq = new int[26];
+     int charValue[] = new int[26];
+     String allWords[] = new String[14855];
+     String bestWord = "";
+     int bestWordValue = 0;
+     String secondBestWord = "";
+     int secondBestWordValue = 0;
+     String thirdBestWord = "";
+     int thirdBestWordValue = 0;
+     Scanner scan = new Scanner(System.in);
+     short[][] wordChars = new short[5][26];
+     int[] charFreq = new int[26];
+     int minChar = 0;
 
-    static HashSet<Character> mustHaveChars = new HashSet<Character>();
-    static LinkedList<String> possibleWords = new LinkedList<String>();
-    static int minChar = 0;
-    public static void main(String[] args) throws FileNotFoundException {
-        readWords();
-        while(possibleWords.size() > 1){
-            getBestWords();
-            printBestWords();
-            System.out.println("Enter the word and the result");
-            char[] word = scan.next().toCharArray();
-            char[] result = scan.next().toCharArray();
-            evaluateWordResult(word, result);
-            getPossibleWords();
-            int asdf = 0;
-        }
-        System.out.println("The Word is: "+possibleWords.get(0));
-    }
+     HashSet<Character> mustHaveChars = new HashSet<Character>();
+     LinkedList<String> possibleWords = new LinkedList<String>();
 
-    public static void printBestWords(){
-        System.out.println("The Best Words Are:");
-        System.out.println("1. "+bestWord +" : "+bestWordValue);
-        System.out.println("2. "+secondBestWord +" : "+secondBestWordValue);
-        System.out.println("3. "+thirdBestWord +" : "+thirdBestWordValue);
-    }
 
-    public static void readWords() throws FileNotFoundException{
+
+    public  void readWords() throws FileNotFoundException{
         Scanner read = new Scanner(new File("validWords.txt"));
         int i = 0;
         while(read.hasNext()){
@@ -57,7 +38,7 @@ public class consoleAI {
         }
     }
 
-    public static void evaluateWordResult(char[] word, char[] result) {
+    public  void evaluateWordResult(char[] word, char[] result) {
         
         for (int i = 0; i < 5; i++) {
             if(result[i] == 'y'){
@@ -78,7 +59,7 @@ public class consoleAI {
         }
     }
 
-    static void calculateCharValue(){
+     void calculateCharValue(){
         minChar = Integer.MAX_VALUE;
         int numOfWords = possibleWords.size();
         for(int i = 0 ; i < 26 ; i++){
@@ -95,7 +76,7 @@ public class consoleAI {
         }
     }
 
-    static void getPossibleWords(){
+     void getPossibleWords(){
         Iterator<String> iterator = possibleWords.iterator();
         while (iterator.hasNext()) {
             String word = iterator.next();
@@ -123,7 +104,7 @@ public class consoleAI {
         }
     }
 
-    static void getBestWords(){
+     void getBestWords(){
         bestWordValue = 0;
         secondBestWordValue = 0;
         thirdBestWordValue = 0;
@@ -136,7 +117,7 @@ public class consoleAI {
                 charUsed[string.charAt(i)-'a'] = true;
             }
             if(possibleWords.contains(string)){
-                value+= minChar+1;
+                value+=minChar+1;
             }
             if(value > bestWordValue){
                 thirdBestWord = secondBestWord;
