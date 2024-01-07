@@ -11,6 +11,7 @@ public class wordleTest {
         int countOfSolved = 0;
         int countOfNotSolved = 0;
         int numberOfWordsGuessed = 0;
+        int maxCount = 0;
         LinkedList<String> wordsNotSolved = new LinkedList<String>();
         for(String ans : allWords){
             System.out.println("solving "+ans);
@@ -42,7 +43,7 @@ public class wordleTest {
                 countOfSolved++;
                 numberOfWordsGuessed += count;
             }
-
+            maxCount = Math.max(maxCount, count);
         }
 
         System.out.println("Number of words solved: "+countOfSolved);
@@ -50,10 +51,13 @@ public class wordleTest {
         double average = (double)numberOfWordsGuessed/countOfSolved;
         System.out.println("Average number of guesses: "+average);
         System.out.println("Words not solved: ");
-        for(String word : wordsNotSolved){
-            System.out.print(word+", ");
+        if(wordsNotSolved.size() > 0){
+            for(String word : wordsNotSolved){
+                System.out.print(word+" ");
+            }
+            System.out.println();
         }
-        
+        System.out.println("Max number of guesses: "+maxCount);
     }
 
     public static void init() throws FileNotFoundException{

@@ -25,19 +25,22 @@ public class consoleAI {
     public static void main(String[] args) throws FileNotFoundException {
         readWords();
         while(possibleWords.size() > 1){
-            getBestWords();
             printBestWords();
             System.out.println("Enter the word and the result");
             char[] word = scan.next().toCharArray();
             char[] result = scan.next().toCharArray();
             evaluateWordResult(word, result);
             getPossibleWords();
-            int asdf = 0;
+            getBestWords();
         }
         System.out.println("The Word is: "+possibleWords.get(0));
     }
 
     public static void printBestWords(){
+        if(bestWordValue == 0){
+            System.out.println("The Best Word Is: salet");
+            return;
+        }
         System.out.println("The Best Words Are:");
         System.out.println("1. "+bestWord +" : "+bestWordValue);
         System.out.println("2. "+secondBestWord +" : "+secondBestWordValue);
