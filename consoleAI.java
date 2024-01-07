@@ -67,7 +67,7 @@ public class consoleAI {
                 wordChars[i][word[i]-'a'] = 1;
             }else{
                 for(int j = 0; j < 5; j++){
-                    wordChars[j][word[i]-'a'] = -1;
+                    wordChars[j][word[i]-'a'] = (short) (wordChars[j][word[i]-'a'] == 1 ? 1 : -1);
                 }
             }
         }
