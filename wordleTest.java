@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -12,9 +11,36 @@ public class wordleTest {
         int countOfNotSolved = 0;
         int numberOfWordsGuessed = 0;
         int maxCount = 0;
+
+        int totalWords = 2309;
+        int currentWord = 0;
+        int progressBarWidth = 50;
+
+        System.out.println("Loading....");
+
+        StringBuilder progressStringBuilder = new StringBuilder();
+        for (int i = 0; i < progressBarWidth; i++) {
+            progressStringBuilder.append(" ");
+        }
+        long start = System.currentTimeMillis();
         LinkedList<String> wordsNotSolved = new LinkedList<String>();
         for(String ans : allWords){
-            System.out.println("solving "+ans);
+
+            int progress = (int) (currentWord / (float) totalWords * progressBarWidth);
+            StringBuffer progressBarBuffer = new StringBuffer(progressBarWidth + 10);
+            progressBarBuffer.append('[');
+            for (int i = 0; i < progressBarWidth; i++) {
+                if (i < progress) {
+                    progressBarBuffer.append('#');
+                } else {
+                    progressBarBuffer.append('-');
+                }
+            }
+            progressBarBuffer.append("] ").append(" solving: ").append(ans);
+            String progressBarWithBuffer = progressBarBuffer.toString();
+
+            System.out.print("\r" + progressBarWithBuffer);
+
             Turtur turtur = new Turtur();
             turtur.readWords();
 
@@ -44,8 +70,23 @@ public class wordleTest {
                 numberOfWordsGuessed += count;
             }
             maxCount = Math.max(maxCount, count);
-        }
 
+            currentWord++;
+        }
+        long finish = System.currentTimeMillis();
+        
+        long totalTime = finish - start;
+        StringBuffer progressBarBuffer = new StringBuffer(progressBarWidth + 10);
+        progressBarBuffer.append('[');
+        for (int i = 0; i < progressBarWidth; i++) {
+            progressBarBuffer.append('#');
+        }
+        String progressBarWithBuffer = progressBarBuffer.toString();
+        
+        System.out.print("\r" + progressBarWithBuffer);
+        
+        System.out.println("\nTotal time: "+totalTime/1000+" seconds");
+        System.out.println("Average time per testcase: "+ totalTime/totalWords+" ms");
         System.out.println("Number of words solved: "+countOfSolved);
         System.out.println("Number of words not solved: "+countOfNotSolved);
         double average = (double)numberOfWordsGuessed/countOfSolved;
