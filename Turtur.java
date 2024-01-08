@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
 import java.util.StringTokenizer;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -38,24 +37,24 @@ public class Turtur {
         }  
     } 
 
-     int charValue[] = new int[26];
-     String allWords[] = new String[14855];
-     String bestWord = "";
-     int bestWordValue = 0;
-     String secondBestWord = "";
-     int secondBestWordValue = 0;
-     String thirdBestWord = "";
-     int thirdBestWordValue = 0;
-     FastReader scan = new FastReader();
-     short[][] wordChars = new short[5][26];
-     int[] charFreq = new int[26];
+    int charValuePos[][] = new int[5][26];
+    int charValue[] = new int[26];
+    String allWords[] = new String[14855];
+    String bestWord = "";
+    int bestWordValue = 0;
+    String secondBestWord = "";
+    int secondBestWordValue = 0;
+    String thirdBestWord = "";
+    int thirdBestWordValue = 0;
+    FastReader scan = new FastReader();
+    short[][] wordChars = new short[5][26];
+     
 
-     HashSet<Character> mustHaveChars = new HashSet<Character>();
-     LinkedList<String> possibleWords = new LinkedList<String>();
+    HashSet<Character> mustHaveChars = new HashSet<Character>();
+    HashSet<Character> knownChars = new HashSet<Character>();
+    HashSet<String> possibleWords = new HashSet<String>();
 
-
-
-    public  void readWords() throws FileNotFoundException{
+    public void readWords() throws FileNotFoundException{
         FastReader read = new FastReader(new File("validWords.txt"));
         int i = 0;
         while(i < 14855){
@@ -70,7 +69,7 @@ public class Turtur {
         }
     }
 
-    public  void evaluateWordResult(char[] word, char[] result) {
+    public void evaluateWordResult(char[] word, char[] result) {
         
         for (int i = 0; i < 5; i++) {
             if(result[i] == 'y'){
@@ -78,6 +77,7 @@ public class Turtur {
                 mustHaveChars.add(word[i]);
             }else if(result[i] == 'g'){
                 mustHaveChars.add(word[i]);
+                knownChars.add(word[i]);
                 wordChars[i][word[i]-'a'] = 1;
             }else{
                 if(!mustHaveChars.contains(word[i])){
@@ -91,22 +91,33 @@ public class Turtur {
         }
     }
 
-     void calculateCharValue(){
+    void calculateCharValue(){
         int numOfWords = possibleWords.size();
+        for(int c = 0; c < 5; c++){
+            for(int i = 0 ; i < 26 ; i++){
+                int count = 0;
+                for (String string : possibleWords) {
+                    if(string.charAt(c) == i+'a'){
+                        count++;
+                    }
+                }
+                double frequency = (double) count / numOfWords;
+                charValuePos[c][i] = (int) (50 * (1 - 2 * Math.abs(frequency - 0.5)));
+            }
+        }
         for(int i = 0 ; i < 26 ; i++){
             int count = 0;
             for (String string : possibleWords) {
                 if(string.contains(Character.toString((char)(i+'a')))){
                     count++;
-                    charFreq[i]++;
                 }
             }
             double frequency = (double) count / numOfWords;
-            charValue[i] = (int) (100 * (1 - 2 * Math.abs(frequency - 0.5)));
+            charValue[i] = (int) (50 * (1 - 2 * Math.abs(frequency - 0.5)));
         }
     }
 
-     void getPossibleWords(){
+    void getPossibleWords(){
         Iterator<String> iterator = possibleWords.iterator();
         while (iterator.hasNext()) {
             String word = iterator.next();
@@ -129,12 +140,11 @@ public class Turtur {
                     break;
                 }
             }
-
             if(!possible)iterator.remove();
         }
     }
 
-     void getBestWords(){
+    void getBestWords(){
         bestWordValue = 0;
         secondBestWordValue = 0;
         thirdBestWordValue = 0;
@@ -145,9 +155,10 @@ public class Turtur {
             for (int i = 0; i < string.length(); i++) {
                 value += charUsed[string.charAt(i)-'a']? 0 : charValue[string.charAt(i)-'a'];
                 charUsed[string.charAt(i)-'a'] = true;
+                value += charValuePos[i][string.charAt(i)-'a'];
             }
             if(possibleWords.contains(string)){
-                value++;
+                value+=1;
             }
             if(value > bestWordValue){
                 thirdBestWord = secondBestWord;

@@ -1,4 +1,5 @@
 import java.io.FileNotFoundException;
+import java.util.Iterator;
 
 public class consoleAI {
     public static void main(String[] args) throws FileNotFoundException {
@@ -23,7 +24,9 @@ public class consoleAI {
             turtur.getPossibleWords();
             count++;
             if(turtur.possibleWords.size() == 1){
-                System.out.println("The answer is: " + turtur.possibleWords.get(0));
+                Iterator<String> it = turtur.possibleWords.iterator();
+                bestWord = it.next();
+                System.out.println("The answer is: " + bestWord);
                 break;
             }else{
                 turtur.getBestWords();

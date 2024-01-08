@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.LinkedList;
 import java.util.StringTokenizer;
+import java.util.Iterator;
 
 
 public class wordleTest {
@@ -84,7 +85,8 @@ public class wordleTest {
                     turtur.getBestWords();
                     bestWord = turtur.bestWord;
                 }else{
-                    bestWord = turtur.possibleWords.get(0);
+                    Iterator<String> it = turtur.possibleWords.iterator();
+                    bestWord = it.next();
                 }
             }
 
@@ -170,9 +172,6 @@ public class wordleTest {
                 result += "b";
             }
         }
-
         return result;
     }
-
-    
 }
