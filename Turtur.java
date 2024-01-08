@@ -1,11 +1,75 @@
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.StringTokenizer;
 import java.util.HashSet;
 import java.util.Iterator;
 
 public class Turtur {
+
+    static class FastReader { 
+        BufferedReader br; 
+        StringTokenizer st; 
+  
+        public FastReader() 
+        { 
+            br = new BufferedReader( 
+                new InputStreamReader(System.in)); 
+        } 
+
+        public FastReader(File file) throws FileNotFoundException
+        { 
+            br = new BufferedReader( 
+                new InputStreamReader(new FileInputStream(file))); 
+        }
+        { 
+            br = new BufferedReader( 
+                new InputStreamReader(System.in)); 
+        }
+  
+        String next() 
+        { 
+            while (st == null || !st.hasMoreElements()) { 
+                try { 
+                    st = new StringTokenizer(br.readLine()); 
+                } 
+                catch (IOException e) { 
+                    e.printStackTrace(); 
+                } 
+            } 
+            return st.nextToken(); 
+        } 
+  
+        int nextInt() { return Integer.parseInt(next()); } 
+  
+        long nextLong() { return Long.parseLong(next()); } 
+  
+        double nextDouble() 
+        { 
+            return Double.parseDouble(next()); 
+        } 
+  
+        String nextLine() 
+        { 
+            String str = ""; 
+            try { 
+                if(st.hasMoreTokens()){ 
+                    str = st.nextToken("\n"); 
+                } 
+                else{ 
+                    str = br.readLine(); 
+                } 
+            } 
+            catch (IOException e) { 
+                e.printStackTrace(); 
+            } 
+            return str; 
+        } 
+    } 
 
      int charValue[] = new int[26];
      String allWords[] = new String[14855];
@@ -15,10 +79,9 @@ public class Turtur {
      int secondBestWordValue = 0;
      String thirdBestWord = "";
      int thirdBestWordValue = 0;
-     Scanner scan = new Scanner(System.in);
+     FastReader scan = new FastReader();
      short[][] wordChars = new short[5][26];
      int[] charFreq = new int[26];
-     int minChar = 0;
 
      HashSet<Character> mustHaveChars = new HashSet<Character>();
      LinkedList<String> possibleWords = new LinkedList<String>();
@@ -26,15 +89,17 @@ public class Turtur {
 
 
     public  void readWords() throws FileNotFoundException{
-        Scanner read = new Scanner(new File("validWords.txt"));
+        FastReader read = new FastReader(new File("validWords.txt"));
         int i = 0;
-        while(read.hasNext()){
+        while(i < 14855){
             allWords[i] = read.next();
             i++;
         }
-        read = new Scanner(new File("answers.txt"));
-        while(read.hasNext()){
+        read = new FastReader(new File("answers.txt"));
+        i = 0;
+        while(i < 2309){
             possibleWords.add(read.next());
+            i++;
         }
     }
 
@@ -60,7 +125,6 @@ public class Turtur {
     }
 
      void calculateCharValue(){
-        minChar = Integer.MAX_VALUE;
         int numOfWords = possibleWords.size();
         for(int i = 0 ; i < 26 ; i++){
             int count = 0;
@@ -72,7 +136,6 @@ public class Turtur {
             }
             double frequency = (double) count / numOfWords;
             charValue[i] = (int) (100 * (1 - 2 * Math.abs(frequency - 0.5)));
-            minChar = Math.min(minChar, charValue[i]);
         }
     }
 
@@ -117,7 +180,7 @@ public class Turtur {
                 charUsed[string.charAt(i)-'a'] = true;
             }
             if(possibleWords.contains(string)){
-                value+=minChar+1;
+                value++;
             }
             if(value > bestWordValue){
                 thirdBestWord = secondBestWord;
