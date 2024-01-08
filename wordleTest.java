@@ -1,20 +1,46 @@
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.StringTokenizer;
+
 
 public class wordleTest {
+
+        static class FastReader { 
+        BufferedReader br; 
+        StringTokenizer st; 
+  
+        public FastReader() { 
+            br = new BufferedReader( 
+                new InputStreamReader(System.in)); 
+        } 
+
+        public FastReader(File file) throws FileNotFoundException{ 
+            br = new BufferedReader( 
+                new InputStreamReader(new FileInputStream(file))); 
+        }
+  
+        String next() { 
+            while (st == null || !st.hasMoreElements()) { 
+                try { 
+                    st = new StringTokenizer(br.readLine()); 
+                } 
+                catch (IOException e) { 
+                    e.printStackTrace(); 
+                } 
+            } 
+            return st.nextToken(); 
+        }  
+    } 
+
     static String allWords[] = new String[2309];
     public static void main(String[] args) throws FileNotFoundException {
         init();
-        int countOfSolved = 0;
         int countOfNotSolved = 0;
-        int numberOfWordsGuessed = 0;
         int maxCount = 0;
-
         int totalWords = 2309;
         int currentWord = 0;
         int progressBarWidth = 50;
+        int numberOfGuesses[] = new int[6];
 
         System.out.println("Loading....");
 
@@ -22,8 +48,8 @@ public class wordleTest {
         for (int i = 0; i < progressBarWidth; i++) {
             progressStringBuilder.append(" ");
         }
-        long start = System.currentTimeMillis();
         LinkedList<String> wordsNotSolved = new LinkedList<String>();
+        long start = System.currentTimeMillis();
         for(String ans : allWords){
 
             int progress = (int) (currentWord / (float) totalWords * progressBarWidth);
@@ -40,7 +66,7 @@ public class wordleTest {
             String progressBarWithBuffer = progressBarBuffer.toString();
 
             System.out.print("\r" + progressBarWithBuffer);
-
+            
             Turtur turtur = new Turtur();
             turtur.readWords();
 
@@ -66,9 +92,9 @@ public class wordleTest {
                 countOfNotSolved++;
                 wordsNotSolved.add(ans);
             }else{
-                countOfSolved++;
-                numberOfWordsGuessed += count;
+                numberOfGuesses[count-1]++;
             }
+
             maxCount = Math.max(maxCount, count);
 
             currentWord++;
@@ -76,6 +102,12 @@ public class wordleTest {
         long finish = System.currentTimeMillis();
         
         long totalTime = finish - start;
+        int countOfSolved = totalWords - countOfNotSolved;
+        int totalNumberOfGuesses = 0;
+        for(int i = 0 ; i < 6 ; i++){
+            totalNumberOfGuesses += numberOfGuesses[i] * (i+1);
+        }
+
         StringBuffer progressBarBuffer = new StringBuffer(progressBarWidth + 10);
         progressBarBuffer.append('[');
         for (int i = 0; i < progressBarWidth; i++) {
@@ -84,15 +116,20 @@ public class wordleTest {
         String progressBarWithBuffer = progressBarBuffer.toString();
         
         System.out.print("\r" + progressBarWithBuffer);
-        
         System.out.println("\nTotal time: "+totalTime/1000+" seconds");
         System.out.println("Average time per testcase: "+ totalTime/totalWords+" ms");
         System.out.println("Number of words solved: "+countOfSolved);
         System.out.println("Number of words not solved: "+countOfNotSolved);
-        double average = (double)numberOfWordsGuessed/countOfSolved;
+        System.out.println("Words that took 1 guess: "+numberOfGuesses[0]);
+        System.out.println("Words that took 2 guesses: "+numberOfGuesses[1]);
+        System.out.println("Words that took 3 guesses: "+numberOfGuesses[2]);
+        System.out.println("Words that took 4 guesses: "+numberOfGuesses[3]);
+        System.out.println("Words that took 5 guesses: "+numberOfGuesses[4]);
+        System.out.println("Words that took 6 guesses: "+numberOfGuesses[5]);
+        double average = (double)totalNumberOfGuesses/countOfSolved;
         System.out.println("Average number of guesses: "+average);
-        System.out.println("Words not solved: ");
         if(wordsNotSolved.size() > 0){
+            System.out.println("Words not solved: ");
             for(String word : wordsNotSolved){
                 System.out.print(word+" ");
             }
@@ -102,9 +139,9 @@ public class wordleTest {
     }
 
     public static void init() throws FileNotFoundException{
-        Scanner read = new Scanner(new File("answers.txt"));
+        FastReader read = new FastReader(new File("answers.txt"));
         int i = 0;
-        while(read.hasNext()){
+        while(i < 2309){
             allWords[i] = read.next();
             i++;
         }
