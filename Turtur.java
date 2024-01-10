@@ -102,7 +102,7 @@ public class Turtur {
                     }
                 }
                 double frequency = (double) count / numOfWords;
-                charValuePos[c][i] = (int) (50 * (1 - 2 * Math.abs(frequency - 0.5)));
+                charValuePos[c][i] = (int) (50 * (frequency <= 0.6 ? func1(frequency) : (func2(frequency))));
             }
         }
         for(int i = 0 ; i < 26 ; i++){
@@ -113,8 +113,15 @@ public class Turtur {
                 }
             }
             double frequency = (double) count / numOfWords;
-            charValue[i] = (int) (50 * (1 - 2 * Math.abs(frequency - 0.5)));
+            charValue[i] = (int) (50 * (frequency <= 0.6 ? func1(frequency) : (func2(frequency))));
         }
+    }
+
+    double func1(double x){
+        return (-1*Math.pow(-1*x+1,6) + 1);
+    }
+    double func2(double x){
+        return (-1*Math.pow(x,11)+1);
     }
 
     void getPossibleWords(){
@@ -176,6 +183,16 @@ public class Turtur {
                 thirdBestWord = string;
                 thirdBestWordValue = value;
             }
+        }
+        if(possibleWords.size() == 2){
+            String temp = bestWord;
+            Iterator<String> iterator = possibleWords.iterator();
+            bestWord = iterator.next();
+            secondBestWord = iterator.next();
+            bestWordValue = 50;
+            secondBestWordValue = 50;
+            thirdBestWord = temp;
+            thirdBestWordValue = 50;
         }
     }
 }
