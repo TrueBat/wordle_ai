@@ -8,7 +8,7 @@ public class consoleAI {
 
         int count = 1;
         String bestWord = "salet";
-        while(count <= 6){
+        while(true){
             if(count == 1){
                 System.out.println("The Best Word is: " + bestWord);
             }else{
@@ -23,6 +23,10 @@ public class consoleAI {
             turtur.evaluateWordResult(word.toCharArray(), result.toCharArray());
             turtur.getPossibleWords();
             count++;
+            if(turtur.possibleWords.size() == 0){
+                System.out.println("No possible answers remaining, it seems that you have made a mistake somewhere.");
+                break;
+            }
             if(turtur.possibleWords.size() == 1){
                 Iterator<String> it = turtur.possibleWords.iterator();
                 bestWord = it.next();

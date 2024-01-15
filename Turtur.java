@@ -113,7 +113,7 @@ public class Turtur {
                 }
             }
             double frequency = (double) count / numOfWords;
-            charValue[i] = (int) (50 * (frequency <= 0.6 ? func1(frequency) : (func2(frequency))));
+            charValue[i] = (int) (50 * (frequency <= 0.5 ? func1(frequency) : (func2(frequency))));
         }
     }
 
