@@ -23,7 +23,7 @@ public class consoleAI {
             turtur.evaluateWordResult(word.toCharArray(), result.toCharArray());
             turtur.getPossibleWords();
             count++;
-            if(turtur.possibleWords.size() == 0){
+            if(turtur.possibleWords.isEmpty()){
                 System.out.println("No possible answers remaining, it seems that you have made a mistake somewhere.");
                 break;
             }

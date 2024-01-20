@@ -37,9 +37,9 @@ public class Turtur {
         }  
     } 
 
-    int charValuePos[][] = new int[5][26];
-    int charValue[] = new int[26];
-    String allWords[] = new String[14855];
+    int[][] charValuePos = new int[5][26];
+    int[] charValue = new int[26];
+    String[] allWords = new String[14855];
     String bestWord = "";
     int bestWordValue = 0;
     String secondBestWord = "";
