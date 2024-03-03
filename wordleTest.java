@@ -42,7 +42,7 @@ public class wordleTest {
         int currentWord = 0;
         int progressBarWidth = 50;
         int[] numberOfGuesses = new int[6];
-
+        int numberOfWrongOldResult = 0;
         System.out.println("Loading....");
 
         StringBuilder progressStringBuilder = new StringBuilder();
@@ -75,6 +75,13 @@ public class wordleTest {
             String bestWord = "salet";
             while(count <= 6){
                 String result = getResult(ans, bestWord);
+                String resultOld = getResultOld(ans, bestWord);
+                if(!result.equals(resultOld)){
+                    System.out.println("Error in result for ans: "+ans+" guess:"+bestWord);
+                    System.out.println("Old: "+resultOld);
+                    System.out.println("New: "+result);
+                    numberOfWrongOldResult++;
+                }
                 if(result.equals("ggggg")){
                     break;
                 }
@@ -86,7 +93,9 @@ public class wordleTest {
                     bestWord = turtur.bestWord;
                 }else{
                     Iterator<String> it = turtur.possibleWords.iterator();
+                    if(it.hasNext())
                     bestWord = it.next();
+                    else System.out.println("No possible words for "+ans+" "+result);
                 }
             }
 
@@ -138,6 +147,9 @@ public class wordleTest {
             System.out.println();
         }
         System.out.println("Max number of guesses: "+maxCount);
+        if(numberOfWrongOldResult > 0){
+            System.out.println("Number of wrong old results: "+numberOfWrongOldResult);
+        }
     }
 
     public static void init() throws FileNotFoundException{
@@ -152,6 +164,45 @@ public class wordleTest {
     public static String getResult(String ans , String guess){
         StringBuilder result = new StringBuilder();
 
+        /*int[] numOfChar = new int[26];
+        for(int i = 0 ; i < ans.length() ; i++){
+            numOfChar[ans.charAt(i)-'a']++;
+        }*/
+        boolean taken[] = new boolean[5];
+        for(int i = 0 ; i < ans.length() ; i++){
+            if(ans.charAt(i) == guess.charAt(i)){
+                result.append("g");
+                //numOfChar[ans.charAt(i)-'a']--;
+            }else /*if(ans.contains(guess.charAt(i)+""))*/{
+                /*
+                if(numOfChar[guess.charAt(i)-'a'] > 0){
+                    result.append("y");
+                    numOfChar[guess.charAt(i)-'a']--;
+                }else{
+                    result.append("b");
+                }
+                */
+                boolean f = false;
+                for(int j = 0 ; j < ans.length() ; j++){
+                    if(ans.charAt(j) == guess.charAt(i) && guess.charAt(j) != ans.charAt(j) && !taken[j]){
+                        result.append("y");
+                        f = true;
+                        taken[j] = true;
+                        break;
+                    }
+                }
+                if(!f)result.append("b");
+
+            }/*else{
+                result.append("b");
+            }*/
+        }
+        return result.toString();
+    }
+
+    public static String getResultOld(String ans , String guess){
+        StringBuilder result = new StringBuilder();
+
         int[] numOfChar = new int[26];
         for(int i = 0 ; i < ans.length() ; i++){
             numOfChar[ans.charAt(i)-'a']++;
@@ -161,13 +212,13 @@ public class wordleTest {
                 result.append("g");
                 numOfChar[ans.charAt(i)-'a']--;
             }else if(ans.contains(guess.charAt(i)+"")){
+                
                 if(numOfChar[guess.charAt(i)-'a'] > 0){
                     result.append("y");
                     numOfChar[guess.charAt(i)-'a']--;
                 }else{
                     result.append("b");
                 }
-
             }else{
                 result.append("b");
             }
