@@ -75,13 +75,13 @@ public class wordleTest {
             String bestWord = "salet";
             while(count <= 6){
                 String result = getResult(ans, bestWord);
-                String resultOld = getResultOld(ans, bestWord);
-                if(!result.equals(resultOld)){
-                    System.out.println("Error in result for ans: "+ans+" guess:"+bestWord);
-                    System.out.println("Old: "+resultOld);
-                    System.out.println("New: "+result);
-                    numberOfWrongOldResult++;
-                }
+                // String resultOld = getResultOld(ans, bestWord);
+                // if(!result.equals(resultOld)){
+                //     System.out.println("Error in result for ans: "+ans+" guess:"+bestWord);
+                //     System.out.println("Old: "+resultOld);
+                //     System.out.println("New: "+result);
+                //     numberOfWrongOldResult++;
+                // }
                 if(result.equals("ggggg")){
                     break;
                 }
